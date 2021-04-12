@@ -302,13 +302,13 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BusinessLogicLibrary\BusinessLogicLibrary.csproj">
+    <ProjectReference Include="..\BusinessLogicLibrary\Medication_BLL.csproj">
       <Project>{cf4d2693-abc2-4ff9-8e9a-5b3e04726d55}</Project>
-      <Name>BusinessLogicLibrary</Name>
+      <Name>Medication_BLL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MedicationEntity\MedicationEntity.csproj">
+    <ProjectReference Include="..\MedicationEntity\Medication_Entity.csproj">
       <Project>{A9C5380F-3EB1-4529-85E8-92A305AA8041}</Project>
-      <Name>MedicationEntity</Name>
+      <Name>Medication_Entity</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

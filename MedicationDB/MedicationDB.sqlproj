@@ -58,12 +58,13 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="PublishedProfiles\" />
+    <Folder Include="Snapshots" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Medication.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PublishedProfiles\MedicationDB.publish.xml" />
+    <None Include="MedicationDB.publish.xml" />
+    <None Include="Snapshots\MedicationDB_20210412_17-06-25.dacpac" />
   </ItemGroup>
 </Project>

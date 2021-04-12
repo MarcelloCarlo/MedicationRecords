@@ -1,12 +1,12 @@
 ﻿using static DataAccessLibrary.MedicationDAL;
-using MedicationEntity;
+using Medication_Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogicLibrary
+namespace Medication_BLL
 {
   public static class MedicationBLL
   {

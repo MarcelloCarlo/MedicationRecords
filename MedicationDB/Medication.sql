@@ -1,52 +1,79 @@
-﻿CREATE TABLE [dbo].[Medication]
-(
-  [Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [Patients] VARCHAR(50) NOT NULL, 
-    [Drug] VARCHAR(50) NOT NULL, 
-    [Dosage] DECIMAL(7, 4) NOT NULL, 
-    [Date] DATETIME NOT NULL 
-)
-GO;
+﻿
+DROP DATABASE IF EXISTS [MedicationDB]
+GO
 
-CREATE PROCEDURE masterStoredProcedure (@Id            INTEGER = NULL,  
-                                          @Patients    VARCHAR(50) = NULL,  
-                                          @Drug     VARCHAR(50) = NULL,  
-                                          @Dosage        DECIMAL(7, 4) = NULL,  
-                                          @Date          DATETIME = NULL,  
-                                          @StatementType NVARCHAR(20) = '')  
-AS  
-  BEGIN  
-      IF @StatementType = 'Insert'  
-        BEGIN  
-            INSERT INTO [dbo].[Medication]  
-                        ([Patients],  
-                         [Drug],  
-                         [Dosage],  
-                         [Date])  
-            VALUES     ( @Patients,  
-                         @Drug,  
-                         @Dosage,  
-                         @Date)  
-        END  
-  
-      IF @StatementType = 'Select'  
-        BEGIN  
-            SELECT *  
-            FROM   [dbo].[Medication]  
-        END  
-  
-      IF @StatementType = 'Update'  
-        BEGIN  
-            UPDATE [dbo].[Medication]  
-            SET    [Patients] = @Patients,  
-                   [Drug] = @Drug,  
-                   [Dosage] = @Dosage,  
-                   [Date] = @Date
-            WHERE  [Id] = @Id 
-        END  
-      ELSE IF @StatementType = 'Delete'  
-        BEGIN  
-            DELETE FROM [dbo].[Medication]  
-            WHERE  [Id] = @Id  
-        END  
-  END    
+CREATE DATABASE [MedicationDB]
+GO
+
+USE [MedicationDB]
+GO
+
+DROP TABLE IF EXISTS [dbo].[Medication]
+CREATE TABLE [dbo].[Medication]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY
+	,[Patients] VARCHAR(50) NOT NULL
+	,[Drug] VARCHAR(50) NOT NULL
+	,[Dosage] DECIMAL(7, 4) NOT NULL
+	,[Date] DATETIME NOT NULL
+)
+GO
+
+CREATE PROCEDURE sp_MedicationCRUD
+(
+	@Id INTEGER = NULL
+	,@Patients VARCHAR(50) = NULL
+	,@Drug VARCHAR(50) = NULL
+	,@Dosage VARCHAR(10) = NULL
+	,@Date DATETIME = NULL
+	,@StatementType NVARCHAR(20) = NULL
+)
+AS
+BEGIN
+	IF @StatementType = 'Insert'
+	BEGIN
+	SET NOCOUNT ON;
+
+	--DECLARED VARIABLES
+	DECLARE @tblPrimId TABLE(Id INT)
+
+	INSERT INTO [dbo].[Medication]
+	(
+		[Patients]
+		,[Drug]
+		,[Dosage]
+		,[Date]
+	)
+	OUTPUT inserted.Id INTO @tblPrimId
+	VALUES
+	( 
+		@Patients
+		,@Drug
+		,@Dosage
+		,@Date
+	)
+
+    SELECT [Id] FROM [Medication] WHERE [Id] = (select ID from @tblPrimId) 
+	END
+
+	IF @StatementType = 'Select'
+	BEGIN
+		SELECT * FROM [dbo].[Medication]
+	END
+
+	IF @StatementType = 'Update'
+	BEGIN
+		UPDATE [dbo].[Medication]
+			SET [Patients] = @Patients
+				,[Drug] = @Drug
+				,[Dosage] = @Dosage
+				,[Date] = @Date
+		WHERE [Id] = @Id
+	END
+
+	ELSE IF @StatementType = 'Delete'
+	BEGIN
+		DELETE FROM [dbo].[Medication]
+		WHERE [Id] = @Id
+	END
+END
