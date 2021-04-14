@@ -1,112 +1,88 @@
-﻿using static DataAccessLibrary.MedicationDAL;
-using Medication_Entity;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-
+using Medication_Entity;
+using Medication_DAL;
 namespace Medication_BLL
 {
-  public static class MedicationBLL
-  {
-    public static int CreateRecord(string txtPatients,
-      string txtDrug,
-      decimal txtDosage,
-      DateTime Date)
-
+    public class MedicationBLL
     {
+        MedicationDAL _medicationDAL = null;
+        public async Task<MedicationEntity> InsertRecord(MedicationEntity medicationEntity)
+        {
+            MedicationEntity result = new MedicationEntity
+            {
+                MessageList = new List<string>()
+            };
 
-      Medication data = new Medication
-      {
+            try
+            {
+                _medicationDAL = new MedicationDAL();
+                result = await _medicationDAL.InsertAsync(medicationEntity);
+            }
+            catch (Exception)
+            {
 
-        Patients = txtPatients,
-        Drug = txtDrug,
-        Dosage = txtDosage,
-        Date = Date
+                throw;
+            }
 
-      };
+            return result;
+        }
 
-      string sqlScript = @"INSERT INTO [dbo].[Medication] ([Patients]
-           ,[Drug]
-           ,[Dosage]
-           ,[Date])
-        VALUES
-           (@Patients,@Drug,@Dosage,@Date);";
+        public async Task<MedicationEntity> UpdateRecord(MedicationEntity medicationEntity) 
+        {
+            MedicationEntity result = new MedicationEntity
+            {
+                MessageList = new List<string>()
+            };
 
-      return SaveData(sqlScript, data);
+            try
+            {
+                _medicationDAL = new MedicationDAL();
+                result.IsSuccess = await _medicationDAL.UpdateAsync(medicationEntity);
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<MedicationEntity>> LoadRecords()
+        {
+            IEnumerable<MedicationEntity> medicationEntities = null;
+
+            try
+            {
+                _medicationDAL = new MedicationDAL();
+                medicationEntities = await _medicationDAL.LoadAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return medicationEntities;
+        }
+
+        public async Task<MedicationEntity> ViewRecord(string query)
+        {
+            MedicationEntity medicationEntity = null;
+
+            try
+            {
+                _medicationDAL = new MedicationDAL();
+                medicationEntity = await _medicationDAL.ViewRecordAsync(query);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return medicationEntity;
+        }
     }
-
-    public static int UpdateRecord(int Id, string txtPatients,
-      string txtDrug,
-      decimal txtDosage,
-      DateTime Date)
-    {
-
-      Medication data = new Medication
-      {
-
-        Id = Id,
-        Patients = txtPatients,
-        Drug = txtDrug,
-        Dosage = txtDosage,
-        Date = Date
-
-      };
-
-      string sqlScript = @"UPDATE [dbo].[Medication] SET 
-           [Patients] = @Patients,
-           [Drug] = @Drug,
-           [Dosage] = @Dosage,
-           [Date] = @Date
-        WHERE [Id] = @Id";
-
-      return SaveData(sqlScript, data);
-
-    }
-
-    public static int DeleteRecord(int Id)
-    {
-
-      Medication data = new Medication
-      {
-
-        Id = Id
-
-      };
-
-      string sqlScript = @"DELETE FROM [dbo].[Medication]
-              WHERE Id = @Id";
-
-      return SaveData(sqlScript, data);
-
-    }
-
-    public static List<Medication> LoadRecords()
-    {
-
-      string sqlScript = @"SELECT [Id] ,[Patients] ,[Drug] ,[Dosage] ,[Date]
-                          FROM [dbo].[Medication]";
-
-      return LoadData<Medication>(sqlScript);
-
-    }
-
-    public static List<Medication> SearchQueryById(int id)
-    {
-
-      Medication data = new Medication
-      {
-
-        Id = id
-
-      };
-
-      string sqlScript = @"SELECT * FROM [dbo].[Medication] WHERE Id = @Id";
-
-      return SearchData(sqlScript, data);
-
-    }
-  }
 }

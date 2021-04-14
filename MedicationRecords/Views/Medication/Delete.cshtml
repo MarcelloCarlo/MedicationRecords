@@ -1,4 +1,4 @@
-﻿@model MedicationRecords.Models.MedicationModel
+﻿@model Medication_Entity.MedicationEntity
 
 @{
     ViewBag.Title = "Delete";
@@ -12,35 +12,27 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.txtPatients)
+            @Html.DisplayNameFor(model => model.Patients)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.txtPatients)
+            @Html.DisplayFor(model => model.Patients)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.txtDrug)
+            @Html.DisplayNameFor(model => model.Drug)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.txtDrug)
+            @Html.DisplayFor(model => model.Drug)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.txtDosage)
+            @Html.DisplayNameFor(model => model.Dosage)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.txtDosage)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.dtpDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.dtpDate)
+            @Html.DisplayFor(model => model.Dosage)
         </dd>
 
     </dl>

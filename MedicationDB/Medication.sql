@@ -1,4 +1,6 @@
-﻿
+﻿USE [master]
+GO
+
 DROP DATABASE IF EXISTS [MedicationDB]
 GO
 
@@ -15,7 +17,7 @@ CREATE TABLE [dbo].[Medication]
 	,[Patients] VARCHAR(50) NOT NULL
 	,[Drug] VARCHAR(50) NOT NULL
 	,[Dosage] DECIMAL(7, 4) NOT NULL
-	,[Date] DATETIME NOT NULL
+	,[Date] VARCHAR(12) NOT NULL
 )
 GO
 
@@ -25,7 +27,6 @@ CREATE PROCEDURE sp_MedicationCRUD
 	,@Patients VARCHAR(50) = NULL
 	,@Drug VARCHAR(50) = NULL
 	,@Dosage VARCHAR(10) = NULL
-	,@Date DATETIME = NULL
 	,@StatementType NVARCHAR(20) = NULL
 )
 AS
@@ -50,7 +51,7 @@ BEGIN
 		@Patients
 		,@Drug
 		,@Dosage
-		,@Date
+		,FORMAT (GETDATE(),'MM/dd/yyyy')
 	)
 
     SELECT [Id] FROM [Medication] WHERE [Id] = (select ID from @tblPrimId) 
@@ -67,7 +68,7 @@ BEGIN
 			SET [Patients] = @Patients
 				,[Drug] = @Drug
 				,[Dosage] = @Dosage
-				,[Date] = @Date
+				,[Date] = FORMAT (GETDATE(),'MM/dd/yyyy')
 		WHERE [Id] = @Id
 	END
 

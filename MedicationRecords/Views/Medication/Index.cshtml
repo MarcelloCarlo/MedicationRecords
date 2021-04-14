@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Medication_Entity.MedicationEntity>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New Records", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Dosage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Drug)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Patients)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dosage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Drug)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patients)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) | 
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

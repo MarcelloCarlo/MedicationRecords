@@ -13,6 +13,6 @@ namespace Medication_Entity
     public string Patients { get; set; }
     public string Drug { get; set; }
     public string Dosage { get; set; }
-    public DateTime Date { get; set; }
+    public string Date { get; set; }
   }
 }

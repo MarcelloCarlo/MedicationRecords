@@ -13,32 +13,126 @@ namespace Medication_DAL
     public class MedicationDAL
     {
 
-        private static readonly string connStr = ConfigurationManager.ConnectionStrings["MedicationDB"].ConnectionString;
+        private static readonly string connStr = ConfigurationManager
+            .ConnectionStrings["MedicationDB"].ConnectionString;
 
-        public static List<T> LoadData<T>(string sql)
+        public async Task<IEnumerable<MedicationEntity>> LoadAsync()
         {
+            return await Task.FromResult(Load());
+        }
 
-            using (IDbConnection dbConnection = new SqlConnection(GetConnectionString()))
+        public IEnumerable<MedicationEntity> Load()
+        {
+            using (SqlConnection conn = new SqlConnection(connStr))
             {
+                using (SqlCommand cmd = new SqlCommand
+                {
+                    Connection = conn,
+                    CommandText = "sp_MedicationCRUD",
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    cmd.Parameters.AddWithValue("@StatementType", "Select");
 
-                return dbConnection.(sql).ToList();
+                    conn.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        MedicationEntity medicationEntity =
+                        new MedicationEntity();
+                        while (reader.Read())
+                        {
+                            yield return new MedicationEntity
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Patients = "" + reader["Patients"],
+                                Drug = "" + reader["Drug"],
+                                Dosage = "" + reader["Dosage"],
+                                Date = "" + reader["Date"]
+
+                            };
+                        }
+                    }
+                }
 
             }
         }
 
-        public static List<T> SearchData<T>(string sql, T data)
+        public async Task<MedicationEntity> ViewRecordAsync(string query)
         {
-
-            using (IDbConnection dbConnection = new SqlConnection(GetConnectionString()))
-            {
-
-                return dbConnection.Query<T>(sql, data).ToList();
-            }
+            return await Task.FromResult(ViewRecord(query));
         }
 
-        public Task<MedicationEntity> InsertAsync(MedicationEntity medicationEntity)
+        public MedicationEntity ViewRecord(string query)
         {
-            return (Task<MedicationEntity>)Task.Run(() =>
+            MedicationEntity medicationEntity = new MedicationEntity();
+
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                using (SqlCommand cmd = new SqlCommand
+                {
+                    Connection = conn,
+                    CommandText = "sp_MedicationCRUD",
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    cmd.Parameters.AddWithValue("@StatementType", "Select");
+
+                    conn.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            medicationEntity.Id = Convert.ToInt32(reader["Id"]);
+                            medicationEntity.Patients = "" + reader["Patients"];
+                            medicationEntity.Drug = "" + reader["Drug"];
+                            medicationEntity.Dosage = "" + reader["Dosage"];
+                            medicationEntity.Date = "" + reader["Date"];
+                        }
+                    }
+                }
+
+            }
+
+            return medicationEntity;
+        }
+
+        public async Task<MedicationEntity> InsertAsync(MedicationEntity medicationEntity)
+        {
+            return await Task.FromResult(Insert(medicationEntity));
+        }
+
+        public MedicationEntity Insert(MedicationEntity medicationEntity)
+        {
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                using (SqlCommand cmd = new SqlCommand
+                {
+                    Connection = conn,
+                    CommandText = "sp_MedicationCRUD",
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    cmd.Parameters.AddWithValue("@Patients",
+                        medicationEntity.Patients);
+                    cmd.Parameters.AddWithValue("@Drug", medicationEntity.Drug);
+                    cmd.Parameters.AddWithValue("@Dosage", medicationEntity.Dosage);
+                    cmd.Parameters.AddWithValue("@StatementType", "Insert");
+
+                    conn.Open();
+                    medicationEntity.Id = Convert.ToInt32(cmd.ExecuteScalar());
+                }
+            }
+
+            return medicationEntity;
+
+        }
+
+        public Task<bool> UpdateAsync(MedicationEntity medicationEntity)
+        {
+            bool result = false;
+            return Task.Run(() =>
             {
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
@@ -49,17 +143,22 @@ namespace Medication_DAL
                         CommandType = CommandType.StoredProcedure
                     })
                     {
-                        cmd.Parameters.AddWithValue("@Patients", medicationEntity.Patients);
+                        cmd.Parameters.AddWithValue("@Id", medicationEntity.Id);
+                        cmd.Parameters.AddWithValue("@Patients",
+                            medicationEntity.Patients);
                         cmd.Parameters.AddWithValue("@Drug", medicationEntity.Drug);
                         cmd.Parameters.AddWithValue("@Dosage", medicationEntity.Dosage);
-                        cmd.Parameters.AddWithValue("@Date", medicationEntity.Date);
-                        cmd.Parameters.AddWithValue("@StatementType", "Insert");
+                        cmd.Parameters.AddWithValue("@StatementType", "Update");
 
                         conn.Open();
                         cmd.ExecuteNonQuery();
+                        result = true;
                     }
                 }
+
+                return result;
             });
         }
+
     }
 }
