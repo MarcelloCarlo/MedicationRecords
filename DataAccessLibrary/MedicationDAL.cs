@@ -160,5 +160,66 @@ namespace Medication_DAL
             });
         }
 
+        public Task<bool> DeleteAsync(MedicationEntity medicationEntity)
+        {
+            bool result = false;
+            return Task.Run(() =>
+            {
+                using (SqlConnection conn = new SqlConnection(connStr))
+                {
+                    using (SqlCommand cmd = new SqlCommand
+                    {
+                        Connection = conn,
+                        CommandText = "sp_MedicationCRUD",
+                        CommandType = CommandType.StoredProcedure
+                    })
+                    {
+                        cmd.Parameters.AddWithValue("@Id", medicationEntity.Id);
+                        cmd.Parameters.AddWithValue("@StatementType", "Delete");
+
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        result = true;
+                    }
+                }
+
+                return result;
+            });
+        }
+
+        public async Task<MedicationEntity> CheckAsync(MedicationEntity medicationEntity)
+        {
+            return (MedicationEntity)await Task.FromResult(Check(medicationEntity));
+        }
+
+        public IEnumerable<MedicationEntity> Check(MedicationEntity medicationEntity)
+        {
+            using (SqlConnection conn = new SqlConnection(connStr))
+            {
+                using (SqlCommand cmd = new SqlCommand
+                {
+                    Connection = conn,
+                    CommandText = "sp_MedicationCRUD",
+                    CommandType = CommandType.StoredProcedure
+                })
+                {
+                    cmd.Parameters.AddWithValue("@Patients",medicationEntity.Patients);
+                    cmd.Parameters.AddWithValue("@Drug", medicationEntity.Drug);
+                    cmd.Parameters.AddWithValue("@StatementType", "Check");
+
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            yield return new MedicationEntity
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                            };
+                        }
+                    }
+                }
+            }
+        }
     }
 }

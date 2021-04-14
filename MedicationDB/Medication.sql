@@ -27,6 +27,7 @@ CREATE PROCEDURE sp_MedicationCRUD
 	,@Patients VARCHAR(50) = NULL
 	,@Drug VARCHAR(50) = NULL
 	,@Dosage VARCHAR(10) = NULL
+    ,@Date VARCHAR(12) = NULL
 	,@StatementType NVARCHAR(20) = NULL
 )
 AS
@@ -77,4 +78,10 @@ BEGIN
 		DELETE FROM [dbo].[Medication]
 		WHERE [Id] = @Id
 	END
+
+    IF @StatementType = 'Check' 
+    BEGIN 
+        SELECT * FROM [dbo].[Medication]
+            WHERE [Patients] = @Patients AND [Drug] = @Drug AND [Date] = FORMAT (GETDATE(),'MM/dd/yyyy')
+    END
 END

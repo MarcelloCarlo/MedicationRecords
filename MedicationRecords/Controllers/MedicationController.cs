@@ -113,5 +113,34 @@ namespace MedicationRecords.Controllers
             return View(medicationModel);
         }
 
+        // GET: MedicationModels/Delete/5
+        public async Task<ActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            _medicationEntity = await _medicationBLL.ViewRecord(id);
+            if (_medicationEntity == null)
+            {
+                return HttpNotFound();
+            }
+
+            _medicationBLL = null;
+            return View(_medicationEntity);
+        }
+
+        // POST: MedicationModels/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(int id)
+        {
+            _medicationEntity.Id = id;
+            await _medicationBLL.DeleteRecord(_medicationEntity);
+            _medicationBLL = null;
+            return RedirectToAction("Index");
+        }
+
     }
+
 }
