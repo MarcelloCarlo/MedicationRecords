@@ -81,7 +81,7 @@ BEGIN
 
     IF @StatementType = 'Check' 
     BEGIN 
-        SELECT * FROM [dbo].[Medication]
+        SELECT [Id] FROM [dbo].[Medication]
             WHERE [Patients] = @Patients AND [Drug] = @Drug AND [Date] = FORMAT (GETDATE(),'MM/dd/yyyy')
     END
 END

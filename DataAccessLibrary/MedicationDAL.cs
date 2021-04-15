@@ -187,9 +187,9 @@ namespace Medication_DAL
             });
         }
 
-        public async Task<MedicationEntity> CheckAsync(MedicationEntity medicationEntity)
+        public async Task<IEnumerable<MedicationEntity>> CheckAsync(MedicationEntity medicationEntity)
         {
-            return (MedicationEntity)await Task.FromResult(Check(medicationEntity));
+            return await Task.FromResult(Check(medicationEntity));
         }
 
         public IEnumerable<MedicationEntity> Check(MedicationEntity medicationEntity)

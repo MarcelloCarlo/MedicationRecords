@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Medication_Entity;
 using Medication_DAL;
+using System.Linq;
+
 namespace Medication_BLL
 {
     public class MedicationBLL
@@ -10,8 +12,7 @@ namespace Medication_BLL
         MedicationDAL _medicationDAL = null;
         public async Task<IEnumerable<MedicationEntity>> LoadRecords()
         {
-            IEnumerable<MedicationEntity> medicationEntities = null;
-
+            IEnumerable<MedicationEntity> medicationEntities;
             try
             {
                 _medicationDAL = new MedicationDAL();
@@ -27,8 +28,7 @@ namespace Medication_BLL
 
         public async Task<MedicationEntity> ViewRecord(string query)
         {
-            MedicationEntity medicationEntity = null;
-
+            MedicationEntity medicationEntity;
             try
             {
                 _medicationDAL = new MedicationDAL();
@@ -52,8 +52,16 @@ namespace Medication_BLL
 
             try
             {
-                _medicationDAL = new MedicationDAL();
-                result = await _medicationDAL.InsertAsync(medicationEntity);
+                if (await CheckRecord(medicationEntity))
+                {
+                    result.IsSuccess = false;
+                }
+                else
+                {
+                    _medicationDAL = new MedicationDAL();
+                    result = await _medicationDAL.InsertAsync(medicationEntity);
+                }
+
             }
             catch (Exception)
             {
@@ -64,7 +72,7 @@ namespace Medication_BLL
             return result;
         }
 
-        public async Task<MedicationEntity> UpdateRecord(MedicationEntity medicationEntity) 
+        public async Task<MedicationEntity> UpdateRecord(MedicationEntity medicationEntity)
         {
             MedicationEntity result = new MedicationEntity
             {
@@ -96,6 +104,24 @@ namespace Medication_BLL
             {
                 _medicationDAL = new MedicationDAL();
                 result.IsSuccess = await _medicationDAL.DeleteAsync(medicationEntity);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return result;
+        }
+
+        public async Task<bool> CheckRecord(MedicationEntity medicationEntity)
+        {
+            bool result;
+            try
+            {
+                _medicationDAL = new MedicationDAL();
+                IEnumerable<MedicationEntity> objmedicationEntities = await _medicationDAL.CheckAsync(medicationEntity);
+                result = (objmedicationEntities != null) && (objmedicationEntities.Count() > 0);
             }
             catch (Exception)
             {

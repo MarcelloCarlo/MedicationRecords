@@ -15,9 +15,10 @@ namespace MedicationRecords.Controllers
 {
     public class MedicationController : Controller
     {
-        MedicationBLL _medicationBLL = new MedicationBLL();
-        MedicationEntity _medicationEntity = new MedicationEntity();
-        MedicationModel _medicationViewModel = new MedicationModel();
+        private MedicationBLL _medicationBLL = new MedicationBLL();
+        private MedicationEntity _medicationEntity = new MedicationEntity();
+        private MedicationModel _medicationViewModel = new MedicationModel();
+        private readonly ResultModel _resultModel = new ResultModel();
         // GET: Medication
         public async Task<ActionResult> Index()
         {
@@ -59,12 +60,26 @@ namespace MedicationRecords.Controllers
                 _medicationEntity.Patients = medicationModel.txtPatients;
                 _medicationEntity.Drug = medicationModel.txtDrug;
                 _medicationEntity.Dosage = medicationModel.txtDosage.ToString();
-                await _medicationBLL.InsertRecord(_medicationEntity);
-                return RedirectToAction("Index");
+
+                MedicationEntity result = new MedicationEntity();
+
+                result = await _medicationBLL.InsertRecord(_medicationEntity);
+
+                if (result.Id != 0)
+                {
+                    UpdateResultModel(true, false, result);
+                }
+                else
+                {
+                    UpdateResultModel(false, false, "Cannot add same drug to a patient.");
+                }
+
+                //return RedirectToAction("Index");
             }
 
             _medicationBLL = null;
-            return View(_medicationEntity);
+
+            return View(_resultModel);
         }
 
         // GET: Medication/Edit/5
@@ -139,6 +154,15 @@ namespace MedicationRecords.Controllers
             await _medicationBLL.DeleteRecord(_medicationEntity);
             _medicationBLL = null;
             return RedirectToAction("Index");
+        }
+
+        public ResultModel UpdateResultModel(bool isSuccess, bool isListResult, object resultObject)
+        {
+            _resultModel.IsSuccess = isSuccess;
+            _resultModel.IsListResult = isListResult;
+            _resultModel.Result = resultObject;
+
+            return _resultModel;
         }
 
     }
