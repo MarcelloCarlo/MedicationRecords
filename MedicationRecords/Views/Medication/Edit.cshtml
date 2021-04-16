@@ -6,56 +6,62 @@
 
 <h2>Edit</h2>
 
-
-@using (Html.BeginForm())
+<hr />
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frmMedicationForm" }))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <hr />
+    <div class="form row">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Id)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.txtDosage, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.txtDosage, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.txtDosage, "", new { @class = "text-danger" })
+        <div class="col col-sm-4 col-md-4 col-lg-4"></div>
+        <div class="col col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group row">
+                <label class="control-label col-md-3" for="txtDosage"><strong>Dosage</strong><span class="text-danger">* </span></label>
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.txtDosage, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.txtDosage, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-md-3" for="txtDrug"><strong>Drug</strong><span class="text-danger">* </span></label>
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.txtDrug, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.txtDrug, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label col-md-3" for="txtPatients"><strong>Patient</strong><span class="text-danger">* </span></label>
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.txtPatients, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.txtPatients, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-12 text-right">
+                    <a href='#' class="btn btn-light" id="btnSubmit" type="button" data-toggle="modal" data-target="#confirmationModal">Submit</a>
+                    <a href='#' class="btn btn-light" id="btnClear" type="button">Clear All</a>
+                    <a href='/' class="btn btn-light" id="btnCancel" type="button">Cancel</a>
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.txtDrug, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.txtDrug, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.txtDrug, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.txtPatients, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.txtPatients, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.txtPatients, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+
 </div>
 
 @section Scripts {
-    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        var pageName = 'Edit';
+        var submitFormURL = "@Url.Content("~/Medication/JsonUpdate")";
+    </script>
     <script src="~/Scripts/moment.min.js"></script>
-    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
-    <script src="~/Scripts/Page/EditMedication.js"></script>
+    <script src="~/Scripts/Page/Medication.js"></script>
 }

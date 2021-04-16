@@ -187,7 +187,7 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\Page\EditMedication.js" />
+    <Content Include="Scripts\Page\Medication.js" />
     <Content Include="Views\Medication\Create.cshtml" />
     <Content Include="Views\Medication\Delete.cshtml" />
     <Content Include="Views\Medication\Edit.cshtml" />
@@ -335,7 +335,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Images\" />
-    <Folder Include="Views\MedicationModels\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />

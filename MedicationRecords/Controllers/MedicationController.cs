@@ -82,6 +82,32 @@ namespace MedicationRecords.Controllers
             return View(_resultModel);
         }
 
+        [HttpPost]
+        public async Task<JsonResult> JsonCreate(MedicationEntity medicationEntity)
+        {
+            if (ModelState.IsValid)
+            {
+                MedicationEntity result = new MedicationEntity();
+
+                result = await _medicationBLL.InsertRecord(medicationEntity);
+
+                if (result.Id != 0)
+                {
+                    UpdateResultModel(true, false, result);
+                }
+                else
+                {
+                    UpdateResultModel(false, false, "Cannot add same drug to a patient.");
+                }
+
+                //return RedirectToAction("Index");
+            }
+
+            _medicationBLL = null;
+
+            return Json(_resultModel);
+        }
+
         // GET: Medication/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
