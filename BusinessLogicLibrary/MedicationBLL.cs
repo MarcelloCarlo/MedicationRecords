@@ -32,7 +32,7 @@ namespace Medication_BLL
             try
             {
                 _medicationDAL = new MedicationDAL();
-                medicationEntity = await _medicationDAL.ViewRecordAsync(query);
+                medicationEntity = await _medicationDAL.ViewAsync(query);
             }
             catch (Exception)
             {

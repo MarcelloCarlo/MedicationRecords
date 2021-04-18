@@ -57,10 +57,11 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script type="text/javascript">
+<script type="text/javascript">
+        var patientId = '';
         var pageName = 'Create';
         var submitFormURL = "@Url.Content("~/Medication/JsonCreate")";
-    </script>
+</script>
     <script src="~/Scripts/moment.min.js"></script>
     <script src="~/Scripts/Page/Medication.js"></script>
 }

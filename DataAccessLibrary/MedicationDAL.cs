@@ -58,12 +58,12 @@ namespace Medication_DAL
             }
         }
 
-        public async Task<MedicationEntity> ViewRecordAsync(string query)
+        public async Task<MedicationEntity> ViewAsync(string query)
         {
-            return await Task.FromResult(ViewRecord(query));
+            return await Task.FromResult(View(query));
         }
 
-        public MedicationEntity ViewRecord(string query)
+        public MedicationEntity View(string query)
         {
             MedicationEntity medicationEntity = new MedicationEntity();
 
@@ -121,7 +121,8 @@ namespace Medication_DAL
                     cmd.Parameters.AddWithValue("@StatementType", "Insert");
 
                     conn.Open();
-                    medicationEntity.Id = (int)cmd.ExecuteScalar();
+
+                    medicationEntity.Id = Convert.ToInt32(cmd.ExecuteScalar());
                 }
             }
 
@@ -131,7 +132,7 @@ namespace Medication_DAL
 
         public Task<bool> UpdateAsync(MedicationEntity medicationEntity)
         {
-            bool result = false;
+            bool result = true;
             return Task.Run(() =>
             {
                 using (SqlConnection conn = new SqlConnection(connStr))
@@ -151,8 +152,13 @@ namespace Medication_DAL
                         cmd.Parameters.AddWithValue("@StatementType", "Update");
 
                         conn.Open();
-                        cmd.ExecuteNonQuery();
-                        result = true;
+                        int rowResult = cmd.ExecuteNonQuery();
+
+                        if (rowResult == 0)
+                        {
+                            result = false;
+                        }
+
                     }
                 }
 
@@ -162,7 +168,7 @@ namespace Medication_DAL
 
         public Task<bool> DeleteAsync(MedicationEntity medicationEntity)
         {
-            bool result = false;
+            bool result = true;
             return Task.Run(() =>
             {
                 using (SqlConnection conn = new SqlConnection(connStr))
@@ -178,8 +184,12 @@ namespace Medication_DAL
                         cmd.Parameters.AddWithValue("@StatementType", "Delete");
 
                         conn.Open();
-                        cmd.ExecuteNonQuery();
-                        result = true;
+                        int rowResult = cmd.ExecuteNonQuery();
+
+                        if (rowResult == 0)
+                        {
+                            result = false;
+                        }
                     }
                 }
 

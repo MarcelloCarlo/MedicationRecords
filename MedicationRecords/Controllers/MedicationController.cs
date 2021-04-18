@@ -157,6 +157,7 @@ namespace MedicationRecords.Controllers
             return View(medicationModel);
         }
 
+        [HttpPost]
         public async Task<JsonResult> JsonEdit(MedicationEntity medicationEntity)
         {
             if (ModelState.IsValid)
@@ -165,7 +166,7 @@ namespace MedicationRecords.Controllers
 
                 result = await _medicationBLL.UpdateRecord(medicationEntity);
 
-                if (result.Id != 0)
+                if (result.IsSuccess)
                 {
                     UpdateResultModel(true, false, result);
                 }
@@ -203,12 +204,37 @@ namespace MedicationRecords.Controllers
         // POST: MedicationModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             _medicationEntity.Id = id;
             await _medicationBLL.DeleteRecord(_medicationEntity);
             _medicationBLL = null;
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> JsonDelete(MedicationEntity medicationEntity)
+        {
+            if (ModelState.IsValid)
+            {
+                MedicationEntity result = new MedicationEntity();
+
+                result = await _medicationBLL.DeleteRecord(medicationEntity);
+
+                if (result.IsSuccess)
+                {
+                    UpdateResultModel(true, false, result);
+                }
+                else
+                {
+                    UpdateResultModel(false, false, "Record deletion failed.");
+                }
+
+            }
+
+            _medicationBLL = null;
+
+            return Json(_resultModel);
         }
 
         public ResultModel UpdateResultModel(bool isSuccess, bool isListResult, object resultObject)
