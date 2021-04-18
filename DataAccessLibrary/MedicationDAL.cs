@@ -121,7 +121,7 @@ namespace Medication_DAL
                     cmd.Parameters.AddWithValue("@StatementType", "Insert");
 
                     conn.Open();
-                    medicationEntity.Id = Convert.ToInt32(cmd.ExecuteScalar());
+                    medicationEntity.Id = (int)cmd.ExecuteScalar();
                 }
             }
 

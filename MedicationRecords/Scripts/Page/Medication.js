@@ -4,6 +4,7 @@
         $("#txtDrug").val('');
         $("#txtPatients").val('');
     });
+
     var successMessage = '';
     $("#btnSubmit").click(function () {
         if (pageName == 'Create') {
@@ -29,8 +30,9 @@
         var headers = {};
         headers['__RequestVerificationToken'] = token;
 
+        var btnDismiss = '<button type="button" class="btn btn-primary" data-dismiss="modal" id="btnClose">Ok</button>';
         //On submit
-        $("#frmMedicationForm").on("submit", function () {
+        $("#btnConfirm").click(function () {
 
             var inputVal = {
                 Dosage: $("#txtDosage").val().trim(),
@@ -46,14 +48,18 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
-                    Loading(false);
                     if (data.IsSuccess) {
 
-                        $('#myModal').modal('show');
+                        $("#confirmationModal").modal('hide');
                         $("#modalContent").html('');
-                        $("#modalContent").append('<label>Are you sure you want to update this record?</label>');
-                        ModalAlert(MODAL_HEADER, "<label>Record successfully saved.</label>");
-                        window.location.replace("/Medication");
+                        $("#modalContent").append('<label>' + successMessage + '</label>');
+                        $("#messageModal").modal('show');
+
+                        $("#btnClose").click(function () {
+                            setTimeout(function () {
+                                window.location.replace("/Medication");
+                            }, 1000);
+                        });
 
                     } else {
                         if (data.IsListResult) {
@@ -63,16 +69,43 @@
                                 msg += "Error : " + data.Result[i] + "\n";
                             }
 
-                            ModalAlert(MODAL_HEADER, msg);
+                            $("#modalFooter").html('')
+                            $("#modalFooter").append(btnDismiss);
+                            $("#modalContent").html('');
+                            $("#modalContent").append('<label>' + msg + '</label>');
+
+                            $("#btnClose").click(function () {
+                                setTimeout(function () {
+                                    window.location.replace("/Medication");
+                                }, 1000);
+                            });
                         }
                         else {
-                            ModalAlert(MODAL_HEADER, "Error : " + data.Result);
+
+                            $("#modalFooter").html('')
+                            $("#modalFooter").append(btnDismiss);
+                            $("#modalContent").html('');
+                            $("#modalContent").append('<label> Error: ' + data.Result + '</label>');
+
+                            $("#btnClose").click(function () {
+                                setTimeout(function () {
+                                    window.location.replace("/Medication");
+                                }, 1000);
+                            });
                         }
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    Loading(false);
-                    ModalAlert(MODAL_HEADER, "Error : " + $(jqXHR.responseText).filter('title').text());
+                    $("#modalFooter").html('')
+                    $("#modalFooter").append(btnDismiss);
+                    $("#modalContent").html('');
+                    $("#modalContent").append('<label> Error: ' + $(jqXHR.responseText).filter('title').text() + textStatus + errorThrown + '</label>');
+
+                    $("#btnClose").click(function () {
+                        setTimeout(function () {
+                            window.location.replace("/Medication");
+                        }, 1000);
+                    });
                 },
             });
 

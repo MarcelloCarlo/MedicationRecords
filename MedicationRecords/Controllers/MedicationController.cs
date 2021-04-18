@@ -39,6 +39,7 @@ namespace MedicationRecords.Controllers
             }
 
             _medicationBLL = null;
+
             return View(_medicationEntity);
         }
 
@@ -129,6 +130,7 @@ namespace MedicationRecords.Controllers
             _medicationViewModel.txtDosage = Convert.ToDecimal(_medicationEntity.Dosage.Trim());
 
             _medicationBLL = null;
+
             return View(_medicationViewModel);
         }
 
@@ -151,7 +153,33 @@ namespace MedicationRecords.Controllers
             }
 
             _medicationBLL = null;
+
             return View(medicationModel);
+        }
+
+        public async Task<JsonResult> JsonEdit(MedicationEntity medicationEntity)
+        {
+            if (ModelState.IsValid)
+            {
+                MedicationEntity result = new MedicationEntity();
+
+                result = await _medicationBLL.UpdateRecord(medicationEntity);
+
+                if (result.Id != 0)
+                {
+                    UpdateResultModel(true, false, result);
+                }
+                else
+                {
+                    UpdateResultModel(false, false, "Cannot add same drug to a patient.");
+                }
+
+                //return RedirectToAction("Index");
+            }
+
+            _medicationBLL = null;
+
+            return Json(_resultModel);
         }
 
         // GET: MedicationModels/Delete/5
@@ -168,6 +196,7 @@ namespace MedicationRecords.Controllers
             }
 
             _medicationBLL = null;
+
             return View(_medicationEntity);
         }
 

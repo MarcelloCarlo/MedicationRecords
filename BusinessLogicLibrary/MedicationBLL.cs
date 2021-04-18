@@ -81,8 +81,16 @@ namespace Medication_BLL
 
             try
             {
-                _medicationDAL = new MedicationDAL();
-                result.IsSuccess = await _medicationDAL.UpdateAsync(medicationEntity);
+                if (await CheckRecord(medicationEntity))
+                {
+                    result.IsSuccess = false;
+                }
+                else
+                {
+                    _medicationDAL = new MedicationDAL();
+                    result.IsSuccess = await _medicationDAL.UpdateAsync(medicationEntity);
+                }
+
             }
             catch (Exception)
             {
