@@ -26,13 +26,13 @@ namespace Medication_BLL
             return medicationEntities;
         }
 
-        public async Task<MedicationEntity> ViewRecord(string query)
+        public async Task<MedicationEntity> ViewRecord(int id)
         {
             MedicationEntity medicationEntity;
             try
             {
                 _medicationDAL = new MedicationDAL();
-                medicationEntity = await _medicationDAL.ViewAsync(query);
+                medicationEntity = await _medicationDAL.ViewAsync(id);
             }
             catch (Exception)
             {

@@ -58,12 +58,12 @@ namespace Medication_DAL
             }
         }
 
-        public async Task<MedicationEntity> ViewAsync(string query)
+        public async Task<MedicationEntity> ViewAsync(int id)
         {
-            return await Task.FromResult(View(query));
+            return await Task.FromResult(View(id));
         }
 
-        public MedicationEntity View(string query)
+        public MedicationEntity View(int id)
         {
             MedicationEntity medicationEntity = new MedicationEntity();
 
@@ -76,7 +76,8 @@ namespace Medication_DAL
                     CommandType = CommandType.StoredProcedure
                 })
                 {
-                    cmd.Parameters.AddWithValue("@StatementType", "Select");
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.Parameters.AddWithValue("@StatementType", "View");
 
                     conn.Open();
 

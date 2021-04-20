@@ -26,13 +26,13 @@ namespace MedicationRecords.Controllers
         }
 
         // GET: Medication/Details/5
-        public async Task<ActionResult> Details(string id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            _medicationEntity = await _medicationBLL.ViewRecord(id);
+            _medicationEntity = await _medicationBLL.ViewRecord((int)id);
             if (_medicationEntity == null)
             {
                 return HttpNotFound();
@@ -117,7 +117,9 @@ namespace MedicationRecords.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            _medicationEntity = await _medicationBLL.ViewRecord(Convert.ToString(id));
+            _medicationEntity = null;
+
+            _medicationEntity = await _medicationBLL.ViewRecord((int)id);
 
             if (_medicationEntity == null)
             {
@@ -184,13 +186,13 @@ namespace MedicationRecords.Controllers
         }
 
         // GET: MedicationModels/Delete/5
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            _medicationEntity = await _medicationBLL.ViewRecord(id);
+            _medicationEntity = await _medicationBLL.ViewRecord((int)id);
             if (_medicationEntity == null)
             {
                 return HttpNotFound();

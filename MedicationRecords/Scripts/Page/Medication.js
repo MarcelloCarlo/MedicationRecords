@@ -202,7 +202,16 @@
         $("#txtPatients").val('');
     });
 
+
 });
+
+function FormValidation() {
+
+    jQuery.validator.addMethod("DecimalFormat", function (value, element, params) {
+        return this.optional(element) || /^\d{0,3}(\.\d{0,4})?$/i.test(value);
+    }, false);
+
+}
 
 function DecimalOnly(textbox) {
     textbox.keydown(function (e) {
