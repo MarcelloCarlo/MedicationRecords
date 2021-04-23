@@ -15,12 +15,14 @@
         $("#modalContent").html('');
         $("#modalContent").append('<label>Are you sure you want to add this record?</label>');
         successMessage = 'Record successfully saved.';
+        FormValidation();
     }
 
     if (pageName == 'Edit') {
         $("#modalContent").html('');
         $("#modalContent").append('<label>Are you sure you want to update this record?</label>');
         successMessage = 'Record successfully updated.';
+        FormValidation();
     }
 
     if (pageName == 'Index') {
@@ -211,6 +213,82 @@ function FormValidation() {
         return this.optional(element) || /^\d{0,3}(\.\d{0,4})?$/i.test(value);
     }, false);
 
+    var ctr = 0;
+    var errorCount = 0;
+    var requiredErrors = [];
+    var otherErrors = []
+    validator = $("#frmAppForm").validate({
+        errorElement: "label",
+        errorClass: "errMessage",
+        onfocusout: false,
+        onkeyup: false,
+        onclick: false,
+        ignore: [], //to still validate the hidden fields
+        rules: {
+            txtDosage: {
+                required: true
+            },
+            txtDrug: {
+                required: true
+            },
+            txtPatients: {
+                required: true
+            },
+        },
+        messages: {
+            txtDosage: {
+                required: 'Dosage is required.'
+            },
+            txtDrug: {
+                required: 'Drug is required.'
+            },
+            txtPatients: {
+                required: 'Patient name is required.'
+            },
+
+        },
+        invalidHandler: function () {
+            $("#errorMessage").empty();
+            $("#errorMessage").css("background-color", "");
+            errorCount = validator.numberOfInvalids();
+        },
+        errorPlacement: function (error, element) {
+            ctr++;
+            if ($(error).text().indexOf('required') < 0) {
+                otherErrors.push('<label class=\"errMessage\"><h5>' + $(error).text() + '.</h5></label> <br />');
+            }
+            else {
+                requiredErrors.push('<label class=\"errMessage\"><h5>' + $(error).text() + '.</h5></label> <br />');
+            }
+
+            if (ctr == errorCount) {
+
+                if ((requiredErrors.length == 1 && otherErrors.length == 1) || (requiredErrors.length > 1 || otherErrors.length > 1)) {
+                    requiredErrors = [];
+                    otherErrors = [];
+                    $("#divErrorMessage").append('<label class=\"errMessage\"><h5>Highlighted fields are required.</h5></label><br />');
+                    $("#divErrorMessage").css({ "background-color": "rgba(183, 2, 2, 0.08)" });
+
+                }
+                else if (requiredErrors.length == 1) {
+                    $("#divErrorMessage").append(requiredErrors);
+                    $("#divErrorMessage").css({ "background-color": "rgba(183, 2, 2, 0.08)" });
+
+                }
+                else if (otherErrors.length == 1) {
+                    $("#divErrorMessage").append(otherErrors);
+                    $("#divErrorMessage").css({ "background-color": "rgba(183, 2, 2, 0.08)" });
+
+                }
+
+                requiredErrors = [];
+                otherErrors = [];
+                ctr = 0;
+            }
+
+        }
+
+    });
 }
 
 function DecimalOnly(textbox) {
