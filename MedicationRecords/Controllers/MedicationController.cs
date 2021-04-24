@@ -20,11 +20,14 @@ namespace MedicationRecords.Controllers
         private MedicationModel _medicationViewModel = new MedicationModel();
         private readonly ResultModel _resultModel = new ResultModel();
         // GET: Medication
+
+        [RequireHttps]
         public async Task<ActionResult> Index()
         {
             return View(await _medicationBLL.LoadRecords());
         }
 
+        [RequireHttps]
         // GET: Medication/Details/5
         public async Task<ActionResult> Details(int? id)
         {
@@ -43,6 +46,7 @@ namespace MedicationRecords.Controllers
             return View(_medicationEntity);
         }
 
+        [RequireHttps]
         // GET: Medication/Create
         public ActionResult Create()
         {
@@ -52,6 +56,7 @@ namespace MedicationRecords.Controllers
         // POST: Medication/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [RequireHttps]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "txtPatients,txtDrug,txtDosage")] MedicationModel medicationModel)
@@ -84,6 +89,7 @@ namespace MedicationRecords.Controllers
         }
 
         [HttpPost]
+        [RequireHttps]
         public async Task<JsonResult> JsonCreate(MedicationEntity medicationEntity)
         {
             if (ModelState.IsValid)
@@ -110,6 +116,7 @@ namespace MedicationRecords.Controllers
         }
 
         // GET: Medication/Edit/5
+        [RequireHttps]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -141,6 +148,7 @@ namespace MedicationRecords.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequireHttps]
         public async Task<ActionResult> Edit([Bind(Include = "Id,txtPatients,txtDrug,txtDosage,dtpDate")] MedicationModel medicationModel)
         {
             if (ModelState.IsValid)
@@ -160,6 +168,7 @@ namespace MedicationRecords.Controllers
         }
 
         [HttpPost]
+        [RequireHttps]
         public async Task<JsonResult> JsonEdit(MedicationEntity medicationEntity)
         {
             if (ModelState.IsValid)
@@ -186,6 +195,7 @@ namespace MedicationRecords.Controllers
         }
 
         // GET: MedicationModels/Delete/5
+        [RequireHttps]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -204,6 +214,7 @@ namespace MedicationRecords.Controllers
         }
 
         // POST: MedicationModels/Delete/5
+        [RequireHttps]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id)
@@ -215,6 +226,7 @@ namespace MedicationRecords.Controllers
         }
 
         [HttpPost]
+        [RequireHttps]
         public async Task<JsonResult> JsonDelete(MedicationEntity medicationEntity)
         {
             if (ModelState.IsValid)
