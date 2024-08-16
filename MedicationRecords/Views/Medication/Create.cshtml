@@ -17,7 +17,7 @@
         <div class="col col-sm-4 col-md-4 col-lg-4"></div>
         <div class="col col-sm-4 col-md-4 col-lg-4">
             <div class="form-group row">
-                <label class="control-label col-md-3" for="txtDosage"><strong>Dosage</strong><span class="text-danger">* </span></label>
+                <label class="control-label col-md-6" for="txtDosage"><strong>Dosage</strong><span class="text-danger">* </span></label>
                 <div class="col-md-9">
                     @Html.EditorFor(model => model.txtDosage, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.txtDosage, "", new { @class = "text-danger" })
@@ -25,7 +25,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="control-label col-md-3" for="txtDrug"><strong>Drug</strong><span class="text-danger">* </span></label>
+                <label class="control-label col-md-6" for="txtDrug"><strong>Drug</strong><span class="text-danger">* </span></label>
                 <div class="col-md-9">
                     @Html.EditorFor(model => model.txtDrug, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.txtDrug, "", new { @class = "text-danger" })
@@ -33,7 +33,7 @@
             </div>
 
             <div class="form-group row">
-                <label class="control-label col-md-3" for="txtPatients"><strong>Patient</strong><span class="text-danger">* </span></label>
+                <label class="control-label col-md-6" for="txtPatients"><strong>Patient</strong><span class="text-danger">* </span></label>
                 <div class="col-md-9">
                     @Html.EditorFor(model => model.txtPatients, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.txtPatients, "", new { @class = "text-danger" })
@@ -42,7 +42,7 @@
 
             <div class="form-group row">
                 <div class="col-md-12 text-right">
-                    <a href='#' class="btn btn-light" id="btnSubmit" type="button" data-toggle="modal" data-target="#confirmationModal">Submit</a>
+                    <a class="btn btn-light" id="btnSubmit" type="button" data-bs-toggle="modal" data-bs-target="#confirmationModal">Submit</a>
                     <a href='#' class="btn btn-light" id="btnClear" type="button">Clear All</a>
                     <a href='/' class="btn btn-light" id="btnCancel" type="button">Cancel</a>
                 </div>
@@ -57,11 +57,11 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-<script type="text/javascript">
+    @Scripts.Render("~/bundles/moment")
+    <script type="text/javascript">
         var patientId = "";
         var pageName = 'Create';
         var submitFormURL = "@Url.Content("~/Medication/JsonCreate")";
-</script>
-    <script src="~/Scripts/moment.min.js"></script>
+    </script>
     <script src="~/Scripts/Page/Medication.js"></script>
 }

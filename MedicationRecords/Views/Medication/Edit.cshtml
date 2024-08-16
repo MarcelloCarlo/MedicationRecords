@@ -59,11 +59,11 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-<script type="text/javascript">
+    @Scripts.Render("~/bundles/moment")
+    <script type="text/javascript">
         var patientId = "@Html.DisplayFor(model => model.Id)";
         var pageName = 'Edit';
         var submitFormURL = "@Url.Content("~/Medication/JsonEdit")";
-</script>
-    <script src="~/Scripts/moment.min.js"></script>
+    </script>
     <script src="~/Scripts/Page/Medication.js"></script>
 }

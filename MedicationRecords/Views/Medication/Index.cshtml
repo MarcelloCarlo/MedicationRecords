@@ -43,7 +43,7 @@
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                <a href='#' id='btnDelete"@Html.DisplayFor(modelItem => item.Id)"' type="button" data-toggle="modal" data-target="#confirmationModal" value="@Html.DisplayFor(modelItem => item.Id)">Delete</a>
+                <a href='#' id='btnDelete"@Html.DisplayFor(modelItem => item.Id)"' type="button" data-bs-toggle="modal" data-bs-target="#confirmationModal" value="@Html.DisplayFor(modelItem => item.Id)">Delete</a>
             </td>
         </tr>
     }
@@ -51,11 +51,11 @@
 </table>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-<script type="text/javascript">
+    @Scripts.Render("~/bundles/moment")
+    <script type="text/javascript">
         var patientId = "";
         var pageName = 'Index';
         var submitFormURL = "@Url.Content("~/Medication/JsonDelete")";
-</script>
-    <script src="~/Scripts/moment.min.js"></script>
+    </script>
     <script src="~/Scripts/Page/Medication.js"></script>
 }
